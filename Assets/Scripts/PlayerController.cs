@@ -7,6 +7,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private float _startSpeed;
     [SerializeField] private float _jumpPower;
+    [SerializeField] private string _groundTag;
+    private bool _canJump = true;
+
 
     private void Update()
     {
@@ -18,9 +21,21 @@ public class PlayerController : MonoBehaviour
             Jump(_jumpPower);
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == _groundTag)
+        {
+            _canJump = true;
+        }
+    }
     private void Jump(float jumpPower)
     {
-        _rigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+        if (_canJump)
+        {
+            _rigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+            _canJump = false;
+        }
     }
 
 
